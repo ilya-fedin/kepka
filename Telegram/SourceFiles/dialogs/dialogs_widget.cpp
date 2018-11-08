@@ -137,12 +137,12 @@ DialogsWidget::DialogsWidget(QWidget *parent, not_null<Window::Controller *> con
 	_mainMenuToggle->setClickedCallback([this] { showMainMenu(); });
 
 	_chooseByDragTimer.setSingleShot(true);
-	connect(&_chooseByDragTimer, SIGNAL(timeout()), this, SLOT(onChooseByDrag()));
+	connect(&_chooseByDragTimer, &QTimer::timeout, this, &DialogsWidget::onChooseByDrag);
 
 	setAcceptDrops(true);
 
 	_searchTimer.setSingleShot(true);
-	connect(&_searchTimer, SIGNAL(timeout()), this, SLOT(onSearchMessages()));
+	connect(&_searchTimer, &QTimer::timeout, [=] { onSearchMessages(); });
 
 	_inner->setLoadMoreCallback([this] {
 		if (_inner->state() == DialogsInner::SearchedState ||
@@ -434,7 +434,7 @@ void DialogsWidget::onDraggingScrollDelta(int delta) {
 		if (!_draggingScrollTimer) {
 			_draggingScrollTimer.create(this);
 			_draggingScrollTimer->setSingleShot(false);
-			connect(_draggingScrollTimer, SIGNAL(timeout()), this, SLOT(onDraggingScrollTimer()));
+			connect(_draggingScrollTimer, &QTimer::timeout, this, &DialogsWidget::onDraggingScrollTimer);
 		}
 		_draggingScrollTimer->start(15);
 	} else {

@@ -489,7 +489,7 @@ Notification::Notification(Manager *manager, History *history, PeerData *peer, P
 	updateNotifyDisplay();
 
 	_hideTimer.setSingleShot(true);
-	connect(&_hideTimer, SIGNAL(timeout()), this, SLOT(onHideByTimer()));
+	connect(&_hideTimer, &QTimer::timeout, this, &Notification::onHideByTimer);
 
 	_close->setClickedCallback([this] { unlinkHistoryInManager(); });
 	_close->setAcceptBoth(true);
@@ -763,9 +763,9 @@ void Notification::showReplyField() {
 
 	// Catch mouse press event to activate the window.
 	QCoreApplication::instance()->installEventFilter(this);
-	connect(_replyArea, SIGNAL(resized()), this, SLOT(onReplyResize()));
-	connect(_replyArea, SIGNAL(submitted(bool)), this, SLOT(onReplySubmit(bool)));
-	connect(_replyArea, SIGNAL(cancelled()), this, SLOT(onReplyCancel()));
+	connect(_replyArea, &Ui::InputArea::resized, this, &Notification::onReplyResize);
+	connect(_replyArea, &Ui::InputArea::submitted, this, &Notification::onReplySubmit);
+	connect(_replyArea, &Ui::InputArea::cancelled, this, &Notification::onReplyCancel);
 
 	_replySend.create(this, st::notifySendReply);
 	_replySend->moveToRight(st::notifyBorderWidth, st::notifyMinHeight);

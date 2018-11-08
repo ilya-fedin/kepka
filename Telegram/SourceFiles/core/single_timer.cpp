@@ -32,9 +32,9 @@ SingleTimer::SingleTimer(QObject *parent)
 
 void SingleTimer::setTimeoutHandler(Fn<void()> handler) {
 	if (_handler && !handler) {
-		disconnect(this, SIGNAL(timeout()), this, SLOT(onTimeout()));
+		disconnect(this, &SingleTimer::timeout, this, &SingleTimer::onTimeout);
 	} else if (handler && !_handler) {
-		connect(this, SIGNAL(timeout()), this, SLOT(onTimeout()));
+		connect(this, &SingleTimer::timeout, this, &SingleTimer::onTimeout);
 	}
 	_handler = std::move(handler);
 }

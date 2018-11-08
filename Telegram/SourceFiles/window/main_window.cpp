@@ -155,7 +155,7 @@ void MainWindow::init() {
 	        [this](Qt::WindowState state) { handleStateChanged(state); });
 
 	_positionUpdatedTimer->setSingleShot(true);
-	connect(_positionUpdatedTimer, SIGNAL(timeout()), this, SLOT(savePositionByTimer()));
+	connect(_positionUpdatedTimer, &QTimer::timeout, this, &MainWindow::savePositionByTimer);
 
 	updatePalette();
 

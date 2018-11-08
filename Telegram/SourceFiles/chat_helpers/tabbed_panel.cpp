@@ -84,7 +84,7 @@ TabbedPanel::TabbedPanel(QWidget *parent, not_null<Window::Controller *> control
 	});
 
 	if (cPlatform() == dbipMac || cPlatform() == dbipMacOld) {
-		connect(App::wnd()->windowHandle(), SIGNAL(activeChanged()), this, SLOT(onWndActiveChanged()));
+		connect(App::wnd()->windowHandle(), &QWindow::activeChanged, this, &TabbedPanel::onWndActiveChanged);
 	}
 	setAttribute(Qt::WA_OpaquePaintEvent, false);
 

@@ -93,9 +93,9 @@ void RateCallBox::ratingChanged(int value) {
 			                 _comment->height());
 
 			updateMaxHeight();
-			connect(_comment, SIGNAL(resized()), this, SLOT(onCommentResized()));
-			connect(_comment, SIGNAL(submitted(bool)), this, SLOT(onSend()));
-			connect(_comment, SIGNAL(cancelled()), this, SLOT(onClose()));
+			connect(_comment, &Ui::InputArea::resized, this, &RateCallBox::onCommentResized);
+			connect(_comment, &Ui::InputArea::submitted, this, &RateCallBox::onSend);
+			connect(_comment, &Ui::InputArea::cancelled, this, &RateCallBox::onClose);
 		}
 		_comment->setFocusFast();
 	} else if (_comment) {

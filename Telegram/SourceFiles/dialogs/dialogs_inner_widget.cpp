@@ -90,7 +90,7 @@ DialogsInner::DialogsInner(QWidget *parent, not_null<Window::Controller *> contr
 	}
 	connect(main, SIGNAL(dialogRowReplaced(Dialogs::Row *, Dialogs::Row *)), this,
 	        SLOT(onDialogRowReplaced(Dialogs::Row *, Dialogs::Row *)));
-	connect(_addContactLnk, SIGNAL(clicked()), App::wnd(), SLOT(onShowAddContact()));
+    connect(_addContactLnk, &Ui::LinkButton::clicked, App::wnd(), &MainWindow::onShowAddContact);
 	_cancelSearchInPeer->setClickedCallback([this] { cancelSearchInPeer(); });
 	_cancelSearchInPeer->hide();
 	_cancelSearchFromUser->setClickedCallback([this] { searchFromUserChanged.notify(nullptr); });
@@ -1290,7 +1290,7 @@ void DialogsInner::contextMenuEvent(QContextMenuEvent *e) {
 	App::main()->fillPeerMenu(
 	    _menuPeer,
 	    [this](const QString &text, Fn<void()> callback) { return _menu->addAction(text, std::move(callback)); }, true);
-	connect(_menu, SIGNAL(destroyed(QObject *)), this, SLOT(onMenuDestroyed(QObject *)));
+    connect(_menu, &Ui::PopupMenu::destroyed, this, &DialogsInner::onMenuDestroyed);
 	_menu->popup(e->globalPos());
 	e->accept();
 }

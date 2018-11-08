@@ -37,7 +37,7 @@ constexpr int kNotifyDeletePhotoAfterMs = 60000;
 
 CachedUserpics::CachedUserpics(Type type)
     : _type(type) {
-	connect(&_clearTimer, SIGNAL(timeout()), this, SLOT(onClear()));
+    connect(&_clearTimer, &QTimer::timeout, this, &CachedUserpics::onClear);
 	QDir().mkpath(cWorkingDir() + qsl("tdata/temp"));
 }
 

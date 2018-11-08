@@ -228,7 +228,7 @@ void ConfirmPhoneBox::prepare() {
 	setDimensions(st::boxWidth,
 	              st::usernamePadding.top() + _code->height() + st::usernameSkip + _about->height() + st::usernameSkip);
 
-	connect(_code, SIGNAL(submitted(bool)), this, SLOT(onSendCode()));
+	connect(_code, &SentCodeField::submitted, this, &ConfirmPhoneBox::onSendCode);
 
 	showChildren();
 }

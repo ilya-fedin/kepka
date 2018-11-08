@@ -45,7 +45,7 @@ namespace Settings {
 GeneralWidget::GeneralWidget(QWidget *parent, UserData *self)
     : BlockWidget(parent, self, lang(lng_settings_section_general))
     , _changeLanguage(this, lang(lng_settings_change_lang), st::boxLinkButton) {
-	connect(_changeLanguage, SIGNAL(clicked()), this, SLOT(onChangeLanguage()));
+    connect(_changeLanguage, &Ui::LinkButton::clicked, this, &GeneralWidget::onChangeLanguage);
 	refreshControls();
 }
 

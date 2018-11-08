@@ -257,9 +257,9 @@ void SendFilesBox::prepare() {
 	if (_caption) {
 		_caption->setMaxLength(MaxPhotoCaption);
 		_caption->setCtrlEnterSubmit(Ui::CtrlEnterSubmit::Both);
-		connect(_caption, SIGNAL(resized()), this, SLOT(onCaptionResized()));
-		connect(_caption, SIGNAL(submitted(bool)), this, SLOT(onSend(bool)));
-		connect(_caption, SIGNAL(cancelled()), this, SLOT(onClose()));
+		connect(_caption, &Ui::InputArea::resized, this, &SendFilesBox::onCaptionResized);
+		connect(_caption, &Ui::InputArea::submitted, this, &SendFilesBox::onSend);
+		connect(_caption, &Ui::InputArea::cancelled, this, &SendFilesBox::onClose);
 	}
 	subscribe(boxClosing, [this] {
 		if (!_confirmed && _cancelledCallback) {
@@ -642,9 +642,9 @@ void EditCaptionBox::prepare() {
 	addButton(langFactory(lng_cancel), [this] { closeBox(); });
 
 	updateBoxSize();
-	connect(_field, SIGNAL(submitted(bool)), this, SLOT(onSave(bool)));
-	connect(_field, SIGNAL(cancelled()), this, SLOT(onClose()));
-	connect(_field, SIGNAL(resized()), this, SLOT(onCaptionResized()));
+	connect(_field, &Ui::InputArea::submitted, this, &EditCaptionBox::onSave);
+	connect(_field, &Ui::InputArea::cancelled, this, &EditCaptionBox::onClose);
+	connect(_field, &Ui::InputArea::resized, this, &EditCaptionBox::onCaptionResized);
 
 	auto cursor = _field->textCursor();
 	cursor.movePosition(QTextCursor::End);

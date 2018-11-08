@@ -101,8 +101,8 @@ void stopManager() {
 }
 
 void registerClipManager(Media::Clip::Manager *manager) {
-	manager->connect(manager, SIGNAL(callback(Media::Clip::Reader *, qint32, qint32)), _manager,
-	                 SLOT(clipCallback(Media::Clip::Reader *, qint32, qint32)));
+	manager->connect(manager, &Media::Clip::Manager::callback, _manager,
+	                 &AnimationManager::clipCallback);
 }
 
 bool Disabled() {
@@ -134,7 +134,7 @@ AnimationManager::AnimationManager()
     : _timer(this)
     , _iterating(false) {
 	_timer.setSingleShot(false);
-	connect(&_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+	connect(&_timer, &QTimer::timeout, this, &AnimationManager::timeout);
 }
 
 void AnimationManager::start(BasicAnimation *obj) {

@@ -284,7 +284,7 @@ void StickersBox::prepare() {
 	Auth().api().updateStickers();
 
 	if (_installed.widget()) {
-		connect(_installed.widget(), SIGNAL(draggingScrollDelta(int)), this, SLOT(onDraggingScrollDelta(int)));
+		connect(_installed.widget(), &Inner::draggingScrollDelta, this, &StickersBox::onDraggingScrollDelta);
 		if (!_megagroupSet) {
 			subscribe(boxClosing, [this] { saveChanges(); });
 		}

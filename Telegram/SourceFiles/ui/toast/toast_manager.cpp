@@ -37,7 +37,7 @@ NeverFreedPointer<QMap<QObject *, Manager *>> _managers;
 
 Manager::Manager(QWidget *parent)
     : QObject(parent) {
-	connect(&_hideTimer, SIGNAL(timeout()), this, SLOT(onHideTimeout()));
+    connect(&_hideTimer, &QTimer::timeout, this, &Manager::onHideTimeout);
 }
 
 bool Manager::eventFilter(QObject *o, QEvent *e) {
@@ -70,7 +70,7 @@ void Manager::addToast(std::unique_ptr<Instance> &&toast) {
 	Widget *widget = t->_widget.get();
 
 	_toastByWidget.insert(widget, t);
-	connect(widget, SIGNAL(destroyed(QObject *)), this, SLOT(onToastWidgetDestroyed(QObject *)));
+	connect(widget, &Widget::destroyed, this, &Manager::onToastWidgetDestroyed);
 	if (auto parent = widget->parentWidget()) {
 		auto found = false;
 		for (auto i = _toastParents.begin(); i != _toastParents.cend();) {

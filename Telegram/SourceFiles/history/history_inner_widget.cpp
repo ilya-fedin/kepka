@@ -97,14 +97,14 @@ HistoryInner::HistoryInner(HistoryWidget *historyWidget, not_null<Window::Contro
     , _scroll(scroll)
     , _scrollDateCheck([this] { onScrollDateCheck(); }) {
 	_touchSelectTimer.setSingleShot(true);
-	connect(&_touchSelectTimer, SIGNAL(timeout()), this, SLOT(onTouchSelect()));
+	connect(&_touchSelectTimer, &QTimer::timeout, this, &HistoryInner::onTouchSelect);
 
 	setAttribute(Qt::WA_AcceptTouchEvents);
-	connect(&_touchScrollTimer, SIGNAL(timeout()), this, SLOT(onTouchScrollTimer()));
+	connect(&_touchScrollTimer, &QTimer::timeout, this, &HistoryInner::onTouchScrollTimer);
 
 	_trippleClickTimer.setSingleShot(true);
 
-	connect(&_scrollDateHideTimer, SIGNAL(timeout()), this, SLOT(onScrollDateHideByTimer()));
+	connect(&_scrollDateHideTimer, &QTimer::timeout, this, &HistoryInner::onScrollDateHideByTimer);
 
 	notifyIsBotChanged();
 
@@ -1462,7 +1462,7 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 		delete _menu;
 		_menu = 0;
 	} else {
-		connect(_menu, SIGNAL(destroyed(QObject *)), this, SLOT(onMenuDestroy(QObject *)));
+		connect(_menu, &Ui::PopupMenu::destroyed, this, &HistoryInner::onMenuDestroy);
 		_menu->popup(e->globalPos());
 		e->accept();
 	}

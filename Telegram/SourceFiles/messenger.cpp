@@ -130,7 +130,7 @@ Messenger::Messenger()
 
 	cChangeTimeFormat(QLocale::system().timeFormat(QLocale::ShortFormat));
 
-	connect(&killDownloadSessionsTimer, SIGNAL(timeout()), this, SLOT(killDownloadSessions()));
+	connect(&killDownloadSessionsTimer, &QTimer::timeout, this, &Messenger::killDownloadSessions);
 
 	DEBUG_LOG(("Application Info: starting app..."));
 

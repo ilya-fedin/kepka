@@ -43,11 +43,11 @@ AutoConnection::AutoConnection(QThread *thread)
 
 	httpStartTimer.moveToThread(thread);
 	httpStartTimer.setSingleShot(true);
-	connect(&httpStartTimer, SIGNAL(timeout()), this, SLOT(onHttpStart()));
+	connect(&httpStartTimer, &QTimer::timeout, this, &AutoConnection::onHttpStart);
 
 	tcpTimeoutTimer.moveToThread(thread);
 	tcpTimeoutTimer.setSingleShot(true);
-	connect(&tcpTimeoutTimer, SIGNAL(timeout()), this, SLOT(onTcpTimeoutTimer()));
+	connect(&tcpTimeoutTimer, &QTimer::timeout, this, &AutoConnection::onTcpTimeoutTimer);
 
 	sock.moveToThread(thread);
 #ifndef TDESKTOP_DISABLE_NETWORK_PROXY

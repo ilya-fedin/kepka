@@ -50,7 +50,7 @@ PhoneWidget::PhoneWidget(QWidget *parent, Widget::Data *data)
 	connect(_code, SIGNAL(addedToNumber(const QString &)), _phone, SLOT(addedToNumber(const QString &)));
 	connect(_phone, SIGNAL(changed()), this, SLOT(onInputChange()));
 	connect(_code, SIGNAL(changed()), this, SLOT(onInputChange()));
-	connect(_checkRequest, SIGNAL(timeout()), this, SLOT(onCheckRequest()));
+	connect(_checkRequest, &QTimer::timeout, this, &PhoneWidget::onCheckRequest);
 
 	setTitleText(langFactory(lng_phone_title));
 	setDescriptionText(langFactory(lng_phone_desc));

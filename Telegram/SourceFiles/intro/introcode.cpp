@@ -94,10 +94,10 @@ CodeWidget::CodeWidget(QWidget *parent, Widget::Data *data)
     , _checkRequest(this) {
 	subscribe(Lang::Current().updated(), [this] { refreshLang(); });
 
-	connect(_code, SIGNAL(changed()), this, SLOT(onInputChange()));
-	connect(_callTimer, SIGNAL(timeout()), this, SLOT(onSendCall()));
-	connect(_checkRequest, SIGNAL(timeout()), this, SLOT(onCheckRequest()));
-	connect(_noTelegramCode, SIGNAL(clicked()), this, SLOT(onNoTelegramCode()));
+	connect(_code, &Intro::CodeInput::changed, this, &CodeWidget::onInputChange);
+	connect(_callTimer, &QTimer::timeout, this, &CodeWidget::onSendCall);
+	connect(_checkRequest, &QTimer::timeout, this, &CodeWidget::onCheckRequest);
+	connect(_noTelegramCode, &Ui::LinkButton::clicked, this, &CodeWidget::onNoTelegramCode);
 
 	_code->setDigitsCountMax(getData()->codeLength);
 	setErrorBelowLink(true);

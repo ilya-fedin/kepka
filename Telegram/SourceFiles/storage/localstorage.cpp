@@ -4793,9 +4793,9 @@ namespace internal {
 
 Manager::Manager() {
 	_mapWriteTimer.setSingleShot(true);
-	connect(&_mapWriteTimer, SIGNAL(timeout()), this, SLOT(mapWriteTimeout()));
+	connect(&_mapWriteTimer, &QTimer::timeout, this, &Manager::mapWriteTimeout);
 	_locationsWriteTimer.setSingleShot(true);
-	connect(&_locationsWriteTimer, SIGNAL(timeout()), this, SLOT(locationsWriteTimeout()));
+	connect(&_locationsWriteTimer, &QTimer::timeout, this, &Manager::locationsWriteTimeout);
 }
 
 void Manager::writeMap(bool fast) {

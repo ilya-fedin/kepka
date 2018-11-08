@@ -58,8 +58,8 @@ void StickerSetBox::prepare() {
 
 	onUpdateButtons();
 
-	connect(_inner, SIGNAL(updateButtons()), this, SLOT(onUpdateButtons()));
-	connect(_inner, SIGNAL(installed(quint64)), this, SLOT(onInstalled(quint64)));
+	connect(_inner, &Inner::updateButtons, this, &StickerSetBox::onUpdateButtons);
+	connect(_inner, &Inner::installed, this, &StickerSetBox::onInstalled);
 }
 
 void StickerSetBox::onInstalled(quint64 setId) {
@@ -123,7 +123,7 @@ StickerSetBox::Inner::Inner(QWidget *parent, const MTPInputStickerSet &set)
 	setMouseTracking(true);
 
 	_previewTimer.setSingleShot(true);
-	connect(&_previewTimer, SIGNAL(timeout()), this, SLOT(onPreview()));
+	connect(&_previewTimer, &QTimer::timeout, this, &StickerSetBox::Inner::onPreview);
 }
 
 void StickerSetBox::Inner::gotSet(const MTPmessages_StickerSet &set) {

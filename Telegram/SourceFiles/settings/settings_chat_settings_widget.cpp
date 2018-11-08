@@ -68,8 +68,8 @@ DownloadPathState::DownloadPathState(QWidget *parent)
             SLOT(onDownloadPath()))
     , _clear(this, lang(lng_download_path_clear)) {
 	connect(_clear, SIGNAL(clicked()), this, SLOT(onClear()));
-	connect(App::wnd(), SIGNAL(tempDirCleared(int)), this, SLOT(onTempDirCleared(int)));
-	connect(App::wnd(), SIGNAL(tempDirClearFailed(int)), this, SLOT(onTempDirClearFailed(int)));
+	connect(App::wnd(), &MainWindow::tempDirCleared, this, &DownloadPathState::onTempDirCleared);
+	connect(App::wnd(), &MainWindow::tempDirClearFailed, this, &DownloadPathState::onTempDirClearFailed);
 	subscribe(Global::RefDownloadPathChanged(), [this]() {
 		_path->link()->setText(downloadPathText());
 		resizeToWidth(width());

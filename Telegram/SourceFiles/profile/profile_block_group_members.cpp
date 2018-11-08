@@ -43,7 +43,7 @@ GroupMembersWidget::GroupMembersWidget(QWidget *parent, PeerData *peer, TitleVis
                      (titleVisibility == TitleVisibility::Visible) ? lang(lng_profile_participants_section) : QString(),
                      st, lang(lng_profile_kick)) {
 	_updateOnlineTimer.setSingleShot(true);
-	connect(&_updateOnlineTimer, SIGNAL(timeout()), this, SLOT(onUpdateOnlineDisplay()));
+	connect(&_updateOnlineTimer, &QTimer::timeout, this, &GroupMembersWidget::onUpdateOnlineDisplay);
 
 	auto observeEvents = UpdateFlag::AdminsChanged | UpdateFlag::MembersChanged | UpdateFlag::UserOnlineChanged;
 	subscribe(Notify::PeerUpdated(),

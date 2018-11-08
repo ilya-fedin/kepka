@@ -135,9 +135,9 @@ void AddContactBox::prepare() {
 	}
 	updateButtons();
 
-	connect(_first, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_last, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_phone, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
+	connect(_first, &Ui::InputField::submitted, this, &AddContactBox::onSubmit);
+	connect(_last, &Ui::InputField::submitted, this, &AddContactBox::onSubmit);
+	connect(_phone, &Ui::PhoneInput::submitted, this, &AddContactBox::onSubmit);
 
 	setDimensions(st::boxWideWidth, st::contactPadding.top() + _first->height() + st::contactSkip + _last->height() +
 	                                    st::contactPhoneSkip + _phone->height() + st::contactPadding.bottom() +
@@ -337,12 +337,12 @@ void GroupInfoBox::prepare() {
 		_description->show();
 		_description->setMaxLength(kMaxChannelDescription);
 
-		connect(_description, SIGNAL(resized()), this, SLOT(onDescriptionResized()));
-		connect(_description, SIGNAL(submitted(bool)), this, SLOT(onNext()));
-		connect(_description, SIGNAL(cancelled()), this, SLOT(onClose()));
+		connect(_description, &Ui::InputArea::resized, this, &GroupInfoBox::onDescriptionResized);
+		connect(_description, &Ui::InputArea::submitted, this, &GroupInfoBox::onNext);
+		connect(_description, &Ui::InputArea::cancelled, this, &GroupInfoBox::onClose);
 	}
 
-	connect(_title, SIGNAL(submitted(bool)), this, SLOT(onNameSubmit()));
+	connect(_title, &Ui::InputField::submitted, this,  &GroupInfoBox::onNameSubmit);
 
 	addButton(langFactory(_creating == CreatingGroupChannel ? lng_create_group_create : lng_create_group_next),
 	          [this] { onNext(); });
@@ -375,7 +375,7 @@ void GroupInfoBox::setupPhotoButton() {
 			    auto box = Ui::show(
 			        Box<PhotoCropBox>(img, (_creating == CreatingGroupChannel) ? peerFromChannel(0) : peerFromChat(0)),
 			        KeepOtherLayers);
-			    connect(box, SIGNAL(ready(const QImage &)), this, SLOT(onPhotoReady(const QImage &)));
+				connect(box, &PhotoCropBox::ready, this, &GroupInfoBox::onPhotoReady);
 		    }));
 	}));
 }
@@ -615,11 +615,11 @@ void SetupChannelBox::prepare() {
 	addButton(langFactory(lng_settings_save), [this] { onSave(); });
 	addButton(langFactory(_existing ? lng_cancel : lng_create_group_skip), [this] { closeBox(); });
 
-	connect(_link, SIGNAL(changed()), this, SLOT(onChange()));
+	connect(_link, &Ui::UsernameInput::changed, this, &SetupChannelBox::onChange);
 	_link->setVisible(_privacyGroup->value() == Privacy::Public);
 
 	_checkTimer.setSingleShot(true);
-	connect(&_checkTimer, SIGNAL(timeout()), this, SLOT(onCheck()));
+	connect(&_checkTimer, &QTimer::timeout, this, &SetupChannelBox::onCheck);
 
 	_privacyGroup->setChangedCallback([this](Privacy value) { privacyChanged(value); });
 	subscribe(Notify::PeerUpdated(), Notify::PeerUpdatedHandler(Notify::PeerUpdate::Flag::InviteLinkChanged,
@@ -1002,8 +1002,8 @@ void EditNameTitleBox::prepare() {
 	_first->setMaxLength(kMaxGroupChannelTitle);
 	_last->setMaxLength(kMaxGroupChannelTitle);
 
-	connect(_first, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_last, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
+	connect(_first, &Ui::InputField::submitted, this, &EditNameTitleBox::onSubmit);
+	connect(_last, &Ui::InputField::submitted, this, &EditNameTitleBox::onSubmit);
 	_last->setVisible(!_peer->isChat());
 }
 
@@ -1242,11 +1242,11 @@ void EditChannelBox::prepare() {
 	_title->setMaxLength(kMaxGroupChannelTitle);
 	_description->setMaxLength(kMaxChannelDescription);
 
-	connect(_description, SIGNAL(resized()), this, SLOT(onDescriptionResized()));
-	connect(_description, SIGNAL(submitted(bool)), this, SLOT(onSave()));
-	connect(_description, SIGNAL(cancelled()), this, SLOT(onClose()));
+	connect(_description, &Ui::InputArea::resized, this, &EditChannelBox::onDescriptionResized);
+	connect(_description, &Ui::InputArea::submitted, this, &EditChannelBox::onSave);
+	connect(_description, &Ui::InputArea::cancelled, this, &EditChannelBox::onClose);
 
-	connect(_publicLink, SIGNAL(clicked()), this, SLOT(onPublicLink()));
+	connect(_publicLink, &Ui::LinkButton::clicked, this, &EditChannelBox::onPublicLink);
 	_publicLink->setVisible(_channel->canEditUsername());
 	_sign->setVisible(canEditSignatures());
 	_inviteEverybody->setVisible(canEditInvites());

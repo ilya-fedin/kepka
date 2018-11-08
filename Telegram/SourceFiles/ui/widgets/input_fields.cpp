@@ -174,13 +174,13 @@ FlatTextarea::FlatTextarea(QWidget *parent, const style::FlatTextarea &st, Fn<QS
 
 	viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
 	_touchTimer.setSingleShot(true);
-	connect(&_touchTimer, SIGNAL(timeout()), this, SLOT(onTouchTimer()));
+	connect(&_touchTimer, &QTimer::timeout, this, &FlatTextarea::onTouchTimer);
 
-	connect(document(), SIGNAL(contentsChange(int, int, int)), this, SLOT(onDocumentContentsChange(int, int, int)));
-	connect(document(), SIGNAL(contentsChanged()), this, SLOT(onDocumentContentsChanged()));
-	connect(this, SIGNAL(undoAvailable(bool)), this, SLOT(onUndoAvailable(bool)));
-	connect(this, SIGNAL(redoAvailable(bool)), this, SLOT(onRedoAvailable(bool)));
-	if (App::wnd()) connect(this, SIGNAL(selectionChanged()), App::wnd(), SLOT(updateGlobalMenu()));
+	connect(document(), &QTextDocument::contentsChange, this, &FlatTextarea::onDocumentContentsChange);
+	connect(document(), &QTextDocument::contentsChanged, this, &FlatTextarea::onDocumentContentsChanged);
+	connect(this, &FlatTextarea::undoAvailable, this, &FlatTextarea::onUndoAvailable);
+	connect(this, &FlatTextarea::redoAvailable, this, &FlatTextarea::onRedoAvailable);
+	if (App::wnd()) connect(this, &FlatTextarea::selectionChanged, App::wnd(), &MainWindow::updateGlobalMenu);
 
 	if (!_lastTextWithTags.text.isEmpty()) {
 		setTextWithTags(_lastTextWithTags, ClearUndoHistory);
@@ -1507,9 +1507,9 @@ FlatInput::FlatInput(QWidget *parent, const style::FlatInput &st, Fn<QString()> 
 	});
 	updatePalette();
 
-	connect(this, SIGNAL(textChanged(const QString &)), this, SLOT(onTextChange(const QString &)));
-	connect(this, SIGNAL(textEdited(const QString &)), this, SLOT(onTextEdited()));
-	if (App::wnd()) connect(this, SIGNAL(selectionChanged()), App::wnd(), SLOT(updateGlobalMenu()));
+	connect(this, &FlatInput::textChanged, this, &FlatInput::onTextChange);
+	connect(this, &FlatInput::textEdited, this, &FlatInput::onTextEdited);
+	if (App::wnd()) connect(this, &FlatInput::selectionChanged, App::wnd(), &MainWindow::updateGlobalMenu);
 
 	setStyle(InputStyle<FlatInput>::instance());
 	QLineEdit::setTextMargins(0, 0, 0, 0);
@@ -1517,7 +1517,7 @@ FlatInput::FlatInput(QWidget *parent, const style::FlatInput &st, Fn<QString()> 
 
 	setAttribute(Qt::WA_AcceptTouchEvents);
 	_touchTimer.setSingleShot(true);
-	connect(&_touchTimer, SIGNAL(timeout()), this, SLOT(onTouchTimer()));
+	connect(&_touchTimer, &QTimer::timeout, this, &FlatInput::onTouchTimer);
 }
 
 void FlatInput::updatePalette() {
@@ -1808,14 +1808,14 @@ InputArea::InputArea(QWidget *parent, const style::InputField &st, Fn<QString()>
 	setAttribute(Qt::WA_AcceptTouchEvents);
 	_inner->viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
 	_touchTimer.setSingleShot(true);
-	connect(&_touchTimer, SIGNAL(timeout()), this, SLOT(onTouchTimer()));
+	connect(&_touchTimer, &QTimer::timeout, this, &InputArea::onTouchTimer);
 
-	connect(_inner->document(), SIGNAL(contentsChange(int, int, int)), this,
-	        SLOT(onDocumentContentsChange(int, int, int)));
-	connect(_inner->document(), SIGNAL(contentsChanged()), this, SLOT(onDocumentContentsChanged()));
-	connect(_inner, SIGNAL(undoAvailable(bool)), this, SLOT(onUndoAvailable(bool)));
-	connect(_inner, SIGNAL(redoAvailable(bool)), this, SLOT(onRedoAvailable(bool)));
-	if (App::wnd()) connect(_inner, SIGNAL(selectionChanged()), App::wnd(), SLOT(updateGlobalMenu()));
+	connect(_inner->document(), &QTextDocument::contentsChange, this,
+	        &InputArea::onDocumentContentsChange);
+	connect(_inner->document(), &QTextDocument::contentsChanged, this, &InputArea::onDocumentContentsChanged);
+	connect(_inner, &Inner::undoAvailable, this, &InputArea::onUndoAvailable);
+	connect(_inner, &Inner::redoAvailable, this, &InputArea::onRedoAvailable);
+	if (App::wnd()) connect(_inner, &Inner::selectionChanged, App::wnd(), &MainWindow::updateGlobalMenu);
 
 	setCursor(style::cur_text);
 	heightAutoupdated();
@@ -2582,14 +2582,14 @@ InputField::InputField(QWidget *parent, const style::InputField &st, Fn<QString(
 	setAttribute(Qt::WA_AcceptTouchEvents);
 	_inner->viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
 	_touchTimer.setSingleShot(true);
-	connect(&_touchTimer, SIGNAL(timeout()), this, SLOT(onTouchTimer()));
+	connect(&_touchTimer, &QTimer::timeout, this, &InputField::onTouchTimer);
 
-	connect(_inner->document(), SIGNAL(contentsChange(int, int, int)), this,
-	        SLOT(onDocumentContentsChange(int, int, int)));
-	connect(_inner->document(), SIGNAL(contentsChanged()), this, SLOT(onDocumentContentsChanged()));
-	connect(_inner, SIGNAL(undoAvailable(bool)), this, SLOT(onUndoAvailable(bool)));
-	connect(_inner, SIGNAL(redoAvailable(bool)), this, SLOT(onRedoAvailable(bool)));
-	if (App::wnd()) connect(_inner, SIGNAL(selectionChanged()), App::wnd(), SLOT(updateGlobalMenu()));
+	connect(_inner->document(), &QTextDocument::contentsChange, this,
+	        &InputField::onDocumentContentsChange);
+	connect(_inner->document(), &QTextDocument::contentsChanged, this, &InputField::onDocumentContentsChanged);
+	connect(_inner, &Inner::undoAvailable, this, &InputField::onUndoAvailable);
+	connect(_inner, &Inner::redoAvailable, this, &InputField::onRedoAvailable);
+	if (App::wnd()) connect(_inner, &Inner::selectionChanged, App::wnd(), &MainWindow::updateGlobalMenu);
 
 	setCursor(style::cur_text);
 	if (!val.isEmpty()) {
@@ -3347,11 +3347,11 @@ MaskedInputField::MaskedInputField(QWidget *parent, const style::InputField &st,
 
 	setAttribute(Qt::WA_OpaquePaintEvent);
 
-	connect(this, SIGNAL(textChanged(const QString &)), this, SLOT(onTextChange(const QString &)));
-	connect(this, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(onCursorPositionChanged(int, int)));
+	connect(this, &MaskedInputField::textChanged, this, &MaskedInputField::onTextChange);
+	connect(this, &MaskedInputField::cursorPositionChanged, this, &MaskedInputField::onCursorPositionChanged);
 
-	connect(this, SIGNAL(textEdited(const QString &)), this, SLOT(onTextEdited()));
-	if (App::wnd()) connect(this, SIGNAL(selectionChanged()), App::wnd(), SLOT(updateGlobalMenu()));
+	connect(this, &MaskedInputField::textEdited, this, &MaskedInputField::onTextEdited);
+	if (App::wnd()) connect(this, &MaskedInputField::selectionChanged, App::wnd(), &MainWindow::updateGlobalMenu);
 
 	setStyle(InputStyle<MaskedInputField>::instance());
 	QLineEdit::setTextMargins(0, 0, 0, 0);
@@ -3359,7 +3359,7 @@ MaskedInputField::MaskedInputField(QWidget *parent, const style::InputField &st,
 
 	setAttribute(Qt::WA_AcceptTouchEvents);
 	_touchTimer.setSingleShot(true);
-	connect(&_touchTimer, SIGNAL(timeout()), this, SLOT(onTouchTimer()));
+	connect(&_touchTimer, &QTimer::timeout, this, &MaskedInputField::onTouchTimer);
 
 	setTextMargins(_st.textMargins);
 

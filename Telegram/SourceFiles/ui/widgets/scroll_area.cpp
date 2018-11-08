@@ -58,10 +58,10 @@ ScrollBar::ScrollBar(ScrollArea *parent, bool vert, const style::ScrollArea *st)
 	recountSize();
 
 	_hideTimer.setSingleShot(true);
-	connect(&_hideTimer, SIGNAL(timeout()), this, SLOT(onHideTimer()));
+	connect(&_hideTimer, &QTimer::timeout, this, &ScrollBar::onHideTimer);
 
-	connect(_connected, SIGNAL(valueChanged(int)), this, SLOT(onValueChanged()));
-	connect(_connected, SIGNAL(rangeChanged(int, int)), this, SLOT(onRangeChanged()));
+	connect(_connected, &QScrollBar::valueChanged, this, &ScrollBar::onValueChanged);
+	connect(_connected, &QScrollBar::rangeChanged, this, &ScrollBar::onRangeChanged);
 
 	updateBar();
 }
@@ -364,8 +364,8 @@ ScrollArea::ScrollArea(QWidget *parent, const style::ScrollArea &st, bool handle
 	if (_touchEnabled) {
 		viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
 		_touchTimer.setSingleShot(true);
-		connect(&_touchTimer, SIGNAL(timeout()), this, SLOT(onTouchTimer()));
-		connect(&_touchScrollTimer, SIGNAL(timeout()), this, SLOT(onTouchScrollTimer()));
+		connect(&_touchTimer, &QTimer::timeout, this, &ScrollArea::onTouchTimer);
+		connect(&_touchScrollTimer, &QTimer::timeout, this, &ScrollArea::onTouchScrollTimer);
 	}
 }
 

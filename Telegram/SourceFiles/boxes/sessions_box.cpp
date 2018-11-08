@@ -42,11 +42,11 @@ void SessionsBox::prepare() {
 
 	setDimensions(st::boxWideWidth, st::sessionsHeight);
 
-	connect(_inner, SIGNAL(oneTerminated()), this, SLOT(onOneTerminated()));
-	connect(_inner, SIGNAL(allTerminated()), this, SLOT(onAllTerminated()));
-	connect(_inner, SIGNAL(terminateAll()), this, SLOT(onTerminateAll()));
-	connect(App::wnd(), SIGNAL(checkNewAuthorization()), this, SLOT(onCheckNewAuthorization()));
-	connect(_shortPollTimer, SIGNAL(timeout()), this, SLOT(onShortPollAuthorizations()));
+	connect(_inner, &Inner::oneTerminated, this, &SessionsBox::onOneTerminated);
+	connect(_inner, &Inner::allTerminated, this, &SessionsBox::onAllTerminated);
+	connect(_inner, &Inner::terminateAll, this, &SessionsBox::onTerminateAll);
+	connect(App::wnd(), &MainWindow::checkNewAuthorization, this, &SessionsBox::onCheckNewAuthorization);
+	connect(_shortPollTimer, &SingleTimer::timeout, this, &SessionsBox::onShortPollAuthorizations);
 
 	_inner = setInnerWidget(object_ptr<Inner>(this, &_list, &_current), st::sessionsScroll);
 	_inner->resize(width(), st::noContactsHeight);
@@ -238,7 +238,7 @@ SessionsBox::Inner::Inner(QWidget *parent, SessionsBox::List *list, SessionsBox:
     , _list(list)
     , _current(current)
     , _terminateAll(this, lang(lng_sessions_terminate_all), st::sessionTerminateAllButton) {
-	connect(_terminateAll, SIGNAL(clicked()), this, SLOT(onTerminateAll()));
+    connect(_terminateAll, &Ui::LinkButton::clicked, this, &SessionsBox::Inner::onTerminateAll);
 	_terminateAll->hide();
 	setAttribute(Qt::WA_OpaquePaintEvent);
 }
@@ -411,7 +411,7 @@ void SessionsBox::Inner::listUpdated() {
 		TerminateButtons::iterator j = _terminateButtons.find(_list->at(i).hash);
 		if (j == _terminateButtons.cend()) {
 			j = _terminateButtons.insert(_list->at(i).hash, new Ui::IconButton(this, st::sessionTerminate));
-			connect(j.value(), SIGNAL(clicked()), this, SLOT(onTerminate()));
+			connect(j.value(), &Ui::IconButton::clicked, this, &SessionsBox::Inner::onTerminate);
 		}
 		j.value()->moveToRight(st::sessionTerminateSkip,
 		                       st::sessionCurrentHeight + i * st::sessionHeight + st::sessionTerminateTop, width());

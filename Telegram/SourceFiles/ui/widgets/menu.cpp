@@ -78,7 +78,7 @@ QAction *Menu::addAction(const QString &text, Fn<void()> callback, const style::
 }
 
 QAction *Menu::addAction(QAction *action, const style::icon *icon, const style::icon *iconOver) {
-	connect(action, SIGNAL(changed()), this, SLOT(actionChanged()));
+	connect(action, &QAction::changed, this, &Menu::actionChanged);
 	_actions.push_back(action);
 
 	auto createData = [icon, iconOver, action] {

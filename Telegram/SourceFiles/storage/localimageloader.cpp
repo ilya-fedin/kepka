@@ -49,7 +49,7 @@ TaskQueue::TaskQueue(QObject *parent, qint32 stopTimeoutMs)
     , _stopTimer(0) {
 	if (stopTimeoutMs > 0) {
 		_stopTimer = new QTimer(this);
-		connect(_stopTimer, SIGNAL(timeout()), this, SLOT(stop()));
+		connect(_stopTimer, &QTimer::timeout, this, &TaskQueue::stop);
 		_stopTimer->setSingleShot(true);
 		_stopTimer->setInterval(stopTimeoutMs);
 	}

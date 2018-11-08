@@ -1099,7 +1099,7 @@ Fader::Fader(QThread *thread)
 	connect(thread, SIGNAL(finished()), this, SLOT(deleteLater()));
 
 	_timer.setSingleShot(true);
-	connect(&_timer, SIGNAL(timeout()), this, SLOT(onTimer()));
+	connect(&_timer, &QTimer::timeout, this, &Fader::onTimer);
 }
 
 void Fader::onInit() {}

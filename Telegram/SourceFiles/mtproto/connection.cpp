@@ -383,12 +383,12 @@ ConnectionPrivate::ConnectionPrivate(Instance *instance, QThread *thread, Connec
 	connect(this, SIGNAL(finished(internal::Connection *)), _instance, SLOT(connectionFinished(internal::Connection *)),
 	        Qt::QueuedConnection);
 
-	connect(&retryTimer, SIGNAL(timeout()), this, SLOT(retryByTimer()));
-	connect(&_waitForConnectedTimer, SIGNAL(timeout()), this, SLOT(onWaitConnectedFailed()));
-	connect(&_waitForReceivedTimer, SIGNAL(timeout()), this, SLOT(onWaitReceivedFailed()));
-	connect(&_waitForIPv4Timer, SIGNAL(timeout()), this, SLOT(onWaitIPv4Failed()));
-	connect(&oldConnectionTimer, SIGNAL(timeout()), this, SLOT(onOldConnection()));
-	connect(&_pingSender, SIGNAL(timeout()), this, SLOT(onPingSender()));
+	connect(&retryTimer, &QTimer::timeout, this, &ConnectionPrivate::retryByTimer);
+	connect(&_waitForConnectedTimer, &QTimer::timeout, this, &ConnectionPrivate::onWaitConnectedFailed);
+	connect(&_waitForReceivedTimer, &QTimer::timeout, this, &ConnectionPrivate::onWaitReceivedFailed);
+	connect(&_waitForIPv4Timer, &QTimer::timeout, this, &ConnectionPrivate::onWaitIPv4Failed);
+	connect(&oldConnectionTimer, &QTimer::timeout, this, &ConnectionPrivate::onOldConnection);
+	connect(&_pingSender, &QTimer::timeout, this, &ConnectionPrivate::onPingSender);
 	connect(sessionData->owner(), SIGNAL(authKeyCreated()), this, SLOT(updateAuthKey()), Qt::QueuedConnection);
 
 	connect(sessionData->owner(), SIGNAL(needToRestart()), this, SLOT(restartNow()), Qt::QueuedConnection);

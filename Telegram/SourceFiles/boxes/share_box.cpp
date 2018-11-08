@@ -59,7 +59,7 @@ void ShareBox::prepare() {
 	setTitle(langFactory(lng_share_title));
 
 	_inner = setInnerWidget(object_ptr<Inner>(this, std::move(_filterCallback)), getTopScrollSkip());
-	connect(_inner, SIGNAL(mustScrollTo(int, int)), this, SLOT(onMustScrollTo(int, int)));
+	connect(_inner, &Inner::mustScrollTo, this, &ShareBox::onMustScrollTo);
 
 	createButtons();
 
@@ -75,12 +75,12 @@ void ShareBox::prepare() {
 	});
 	_select->setResizedCallback([this] { updateScrollSkips(); });
 	_select->setSubmittedCallback([this](bool) { _inner->onSelectActive(); });
-	connect(_inner, SIGNAL(searchByUsername()), this, SLOT(onNeedSearchByUsername()));
+	connect(_inner, &Inner::searchByUsername, this, &ShareBox::onNeedSearchByUsername);
 	_inner->setPeerSelectedChangedCallback(
 	    [this](PeerData *peer, bool checked) { onPeerSelectedChanged(peer, checked); });
 
 	_searchTimer->setSingleShot(true);
-	connect(_searchTimer, SIGNAL(timeout()), this, SLOT(onSearchByUsername()));
+	connect(_searchTimer, &QTimer::timeout, [this](){ onSearchByUsername(); });
 
 	_select->raise();
 }

@@ -48,9 +48,9 @@ void UsernameBox::prepare() {
 	addButton(langFactory(lng_settings_save), [this] { onSave(); });
 	addButton(langFactory(lng_cancel), [this] { closeBox(); });
 
-	connect(_username, SIGNAL(changed()), this, SLOT(onChanged()));
-	connect(_username, SIGNAL(submitted(bool)), this, SLOT(onSave()));
-	connect(_link, SIGNAL(clicked()), this, SLOT(onLinkClick()));
+	connect(_username, &Ui::UsernameInput::changed, this, &UsernameBox::onChanged);
+	connect(_username, &Ui::UsernameInput::submitted, this, &UsernameBox::onSave);
+	connect(_link, &Ui::LinkButton::clicked, this, &UsernameBox::onLinkClick);
 
 	_about.setRichText(st::usernameTextStyle, lang(lng_username_about));
 	setDimensions(st::boxWidth, st::usernamePadding.top() + _username->height() + st::usernameSkip +
@@ -58,7 +58,7 @@ void UsernameBox::prepare() {
 	                                3 * st::usernameTextStyle.lineHeight + st::usernamePadding.bottom());
 
 	_checkTimer->setSingleShot(true);
-	connect(_checkTimer, SIGNAL(timeout()), this, SLOT(onCheck()));
+	connect(_checkTimer, &QTimer::timeout, this, &UsernameBox::onCheck);
 
 	updateLinkText();
 }

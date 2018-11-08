@@ -655,21 +655,21 @@ EditColorBox::EditColorBox(QWidget *, const QString &title, QColor current)
 void EditColorBox::prepare() {
 	setTitle([this] { return _title; });
 
-	connect(_hueField, SIGNAL(changed()), this, SLOT(onFieldChanged()));
-	connect(_saturationField, SIGNAL(changed()), this, SLOT(onFieldChanged()));
-	connect(_brightnessField, SIGNAL(changed()), this, SLOT(onFieldChanged()));
-	connect(_redField, SIGNAL(changed()), this, SLOT(onFieldChanged()));
-	connect(_greenField, SIGNAL(changed()), this, SLOT(onFieldChanged()));
-	connect(_blueField, SIGNAL(changed()), this, SLOT(onFieldChanged()));
-	connect(_result, SIGNAL(changed()), this, SLOT(onFieldChanged()));
+	connect(_hueField, &EditColorBox::Field::changed, this, &EditColorBox::onFieldChanged);
+	connect(_saturationField, &EditColorBox::Field::changed, this, &EditColorBox::onFieldChanged);
+	connect(_brightnessField, &EditColorBox::Field::changed, this, &EditColorBox::onFieldChanged);
+	connect(_redField, &EditColorBox::Field::changed, this, &EditColorBox::onFieldChanged);
+	connect(_greenField, &EditColorBox::Field::changed, this, &EditColorBox::onFieldChanged);
+	connect(_blueField, &EditColorBox::Field::changed, this, &EditColorBox::onFieldChanged);
+	connect(_result, &EditColorBox::ResultField::changed, this, &EditColorBox::onFieldChanged);
 
-	connect(_hueField, SIGNAL(submitted(bool)), this, SLOT(onFieldSubmitted()));
-	connect(_saturationField, SIGNAL(submitted(bool)), this, SLOT(onFieldSubmitted()));
-	connect(_brightnessField, SIGNAL(submitted(bool)), this, SLOT(onFieldSubmitted()));
-	connect(_redField, SIGNAL(submitted(bool)), this, SLOT(onFieldSubmitted()));
-	connect(_greenField, SIGNAL(submitted(bool)), this, SLOT(onFieldSubmitted()));
-	connect(_blueField, SIGNAL(submitted(bool)), this, SLOT(onFieldSubmitted()));
-	connect(_result, SIGNAL(submitted(bool)), this, SLOT(onFieldSubmitted()));
+	connect(_hueField, &EditColorBox::Field::submitted, this, &EditColorBox::onFieldSubmitted);
+	connect(_saturationField, &EditColorBox::Field::submitted, this, &EditColorBox::onFieldSubmitted);
+	connect(_brightnessField, &EditColorBox::Field::submitted, this, &EditColorBox::onFieldSubmitted);
+	connect(_redField, &EditColorBox::Field::submitted, this, &EditColorBox::onFieldSubmitted);
+	connect(_greenField, &EditColorBox::Field::submitted, this, &EditColorBox::onFieldSubmitted);
+	connect(_blueField, &EditColorBox::Field::submitted, this, &EditColorBox::onFieldSubmitted);
+	connect(_result, &EditColorBox::ResultField::submitted, this, &EditColorBox::onFieldSubmitted);
 
 	addButton(langFactory(lng_settings_save), [this] { saveColor(); });
 	addButton(langFactory(lng_cancel), [this] { closeBox(); });

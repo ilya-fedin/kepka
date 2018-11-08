@@ -84,9 +84,9 @@ void ReportBox::reasonChanged(Reason reason) {
 			    _reasonOtherText->height());
 
 			updateMaxHeight();
-			connect(_reasonOtherText, SIGNAL(resized()), this, SLOT(onReasonResized()));
-			connect(_reasonOtherText, SIGNAL(submitted(bool)), this, SLOT(onReport()));
-			connect(_reasonOtherText, SIGNAL(cancelled()), this, SLOT(onClose()));
+			connect(_reasonOtherText, &Ui::InputArea::resized, this, &ReportBox::onReasonResized);
+			connect(_reasonOtherText, &Ui::InputArea::submitted, this, &ReportBox::onReport);
+			connect(_reasonOtherText, &Ui::InputArea::cancelled, this, &ReportBox::onClose);
 		}
 		_reasonOtherText->setFocusFast();
 	} else if (_reasonOtherText) {

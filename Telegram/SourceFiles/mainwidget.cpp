@@ -134,16 +134,16 @@ MainWidget::MainWidget(QWidget *parent, not_null<Window::Controller *> controlle
 	connect(_dialogs, SIGNAL(cancelled()), this, SLOT(dialogsCancelled()));
 	connect(this, SIGNAL(dialogsUpdated()), _dialogs, SLOT(onListScroll()));
 	connect(_history, SIGNAL(cancelled()), _dialogs, SLOT(activate()));
-	connect(&noUpdatesTimer, SIGNAL(timeout()), this, SLOT(mtpPing()));
-	connect(&_onlineTimer, SIGNAL(timeout()), this, SLOT(updateOnline()));
-	connect(&_onlineUpdater, SIGNAL(timeout()), this, SLOT(updateOnlineDisplay()));
-	connect(&_idleFinishTimer, SIGNAL(timeout()), this, SLOT(checkIdleFinish()));
-	connect(&_bySeqTimer, SIGNAL(timeout()), this, SLOT(getDifference()));
-	connect(&_byPtsTimer, SIGNAL(timeout()), this, SLOT(onGetDifferenceTimeByPts()));
-	connect(&_byMinChannelTimer, SIGNAL(timeout()), this, SLOT(getDifference()));
-	connect(&_failDifferenceTimer, SIGNAL(timeout()), this, SLOT(onGetDifferenceTimeAfterFail()));
+	connect(&noUpdatesTimer, &QTimer::timeout, this, &MainWidget::mtpPing);
+	connect(&_onlineTimer, &QTimer::timeout, [=]{updateOnline(); });
+	connect(&_onlineUpdater, &QTimer::timeout, this, &MainWidget::updateOnlineDisplay);
+	connect(&_idleFinishTimer, &QTimer::timeout, this, &MainWidget::checkIdleFinish);
+	connect(&_bySeqTimer, &QTimer::timeout, this, &MainWidget::getDifference);
+	connect(&_byPtsTimer, &QTimer::timeout, this, &MainWidget::onGetDifferenceTimeByPts);
+	connect(&_byMinChannelTimer, &QTimer::timeout, this, &MainWidget::getDifference);
+	connect(&_failDifferenceTimer, &QTimer::timeout, this, &MainWidget::onGetDifferenceTimeAfterFail);
 	connect(_history, SIGNAL(historyShown(History *, MsgId)), this, SLOT(onHistoryShown(History *, MsgId)));
-	connect(&updateNotifySettingTimer, SIGNAL(timeout()), this, SLOT(onUpdateNotifySettings()));
+	connect(&updateNotifySettingTimer, &QTimer::timeout, this, &MainWidget::onUpdateNotifySettings);
 	subscribe(Media::Player::Updated(), [this](const AudioMsgId &audioId) {
 		if (audioId.type() != AudioMsgId::Type::Video) {
 			handleAudioUpdate(audioId);
@@ -157,11 +157,11 @@ MainWidget::MainWidget(QWidget *parent, not_null<Window::Controller *> controlle
 
 	QCoreApplication::instance()->installEventFilter(this);
 
-	connect(&_updateMutedTimer, SIGNAL(timeout()), this, SLOT(onUpdateMuted()));
-	connect(&_viewsIncrementTimer, SIGNAL(timeout()), this, SLOT(onViewsIncrement()));
+	connect(&_updateMutedTimer, &QTimer::timeout, this, &MainWidget::onUpdateMuted);
+	connect(&_viewsIncrementTimer, &QTimer::timeout, this, &MainWidget::onViewsIncrement);
 
 	_webPageOrGameUpdater.setSingleShot(true);
-	connect(&_webPageOrGameUpdater, SIGNAL(timeout()), this, SLOT(webPagesOrGamesUpdate()));
+	connect(&_webPageOrGameUpdater, &QTimer::timeout, this, &MainWidget::webPagesOrGamesUpdate);
 
 	_sideResizeArea->setCursor(style::cur_sizehor);
 
@@ -171,7 +171,7 @@ MainWidget::MainWidget(QWidget *parent, not_null<Window::Controller *> controlle
 			clearCachedBackground();
 		}
 	});
-	connect(&_cacheBackgroundTimer, SIGNAL(timeout()), this, SLOT(onCacheBackground()));
+	connect(&_cacheBackgroundTimer, &QTimer::timeout, this, &MainWidget::onCacheBackground);
 
 	_playerPanel->setPinCallback([this] { switchToFixedPlayer(); });
 	_playerPanel->setCloseCallback([this] { closeBothPlayers(); });

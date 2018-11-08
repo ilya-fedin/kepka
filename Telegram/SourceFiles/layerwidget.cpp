@@ -690,7 +690,7 @@ void LayerStackWidget::initChildLayer(LayerWidget *layer) {
 	layer->setParent(this);
 	layer->setClosedCallback([this, layer] { onLayerClosed(layer); });
 	layer->setResizedCallback([this] { onLayerResized(); });
-	connect(layer, SIGNAL(destroyed(QObject *)), this, SLOT(onLayerDestroyed(QObject *)));
+	connect(layer, &LayerWidget::destroyed, this, &LayerStackWidget::onLayerDestroyed);
 	layer->parentResized();
 }
 

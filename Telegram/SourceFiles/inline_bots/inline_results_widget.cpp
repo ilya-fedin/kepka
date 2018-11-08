@@ -60,10 +60,10 @@ Inner::Inner(QWidget *parent, not_null<Window::Controller *> controller)
 	setAttribute(Qt::WA_OpaquePaintEvent);
 
 	_previewTimer.setSingleShot(true);
-	connect(&_previewTimer, SIGNAL(timeout()), this, SLOT(onPreview()));
+	connect(&_previewTimer, &QTimer::timeout, this, &Inner::onPreview);
 
 	_updateInlineItems.setSingleShot(true);
-	connect(&_updateInlineItems, SIGNAL(timeout()), this, SLOT(onUpdateInlineItems()));
+	connect(&_updateInlineItems, &QTimer::timeout, this, &Inner::onUpdateInlineItems);
 
 	subscribe(Auth().downloaderTaskFinished(), [this] { update(); });
 	subscribe(controller->gifPauseLevelChanged(), [this] {
@@ -733,7 +733,7 @@ Widget::Widget(QWidget *parent, not_null<Window::Controller *> controller)
 
 	// inline bots
 	_inlineRequestTimer.setSingleShot(true);
-	connect(&_inlineRequestTimer, SIGNAL(timeout()), this, SLOT(onInlineRequest()));
+	connect(&_inlineRequestTimer, &QTimer::timeout, this, &Widget::onInlineRequest);
 
 	if (cPlatform() == dbipMac || cPlatform() == dbipMacOld) {
 		connect(App::wnd()->windowHandle(), SIGNAL(activeChanged()), this, SLOT(onWndActiveChanged()));

@@ -111,7 +111,7 @@ EmojiColorPicker::EmojiColorPicker(QWidget *parent)
 	resize(w, h);
 
 	_hideTimer.setSingleShot(true);
-	connect(&_hideTimer, SIGNAL(timeout()), this, SLOT(hideAnimated()));
+	connect(&_hideTimer, &QTimer::timeout, this, &EmojiColorPicker::hideAnimated);
 }
 
 void EmojiColorPicker::showEmoji(EmojiPtr emoji) {
@@ -334,9 +334,9 @@ EmojiListWidget::EmojiListWidget(QWidget *parent, not_null<Window::Controller *>
 	}
 
 	_showPickerTimer.setSingleShot(true);
-	connect(&_showPickerTimer, SIGNAL(timeout()), this, SLOT(onShowPicker()));
-	connect(_picker, SIGNAL(emojiSelected(EmojiPtr)), this, SLOT(onColorSelected(EmojiPtr)));
-	connect(_picker, SIGNAL(hidden()), this, SLOT(onPickerHidden()));
+	connect(&_showPickerTimer, &QTimer::timeout, this, &EmojiListWidget::onShowPicker);
+	connect(_picker, &ChatHelpers::EmojiColorPicker::emojiSelected, this, &EmojiListWidget::onColorSelected);
+	connect(_picker, &ChatHelpers::EmojiColorPicker::hidden, this, &EmojiListWidget::onPickerHidden);
 }
 
 void EmojiListWidget::setVisibleTopBottom(int visibleTop, int visibleBottom) {

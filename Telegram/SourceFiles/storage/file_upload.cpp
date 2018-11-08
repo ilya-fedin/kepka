@@ -33,9 +33,9 @@ constexpr auto kMaxUploadFileParallelSize =
 
 Uploader::Uploader() {
 	nextTimer.setSingleShot(true);
-	connect(&nextTimer, SIGNAL(timeout()), this, SLOT(sendNext()));
+	connect(&nextTimer, &QTimer::timeout, this, &Uploader::sendNext);
 	killSessionsTimer.setSingleShot(true);
-	connect(&killSessionsTimer, SIGNAL(timeout()), this, SLOT(killSessions()));
+	connect(&killSessionsTimer, &QTimer::timeout, this, &Uploader::killSessions);
 }
 
 void Uploader::uploadMedia(const FullMsgId &msgId, const SendMediaReady &media) {

@@ -82,8 +82,8 @@ void BoxContent::finishPrepare() {
 void BoxContent::finishScrollCreate() {
 	Expects(_scroll != nullptr);
 	updateScrollAreaGeometry();
-	connect(_scroll, SIGNAL(scrolled()), this, SLOT(onScroll()));
-	connect(_scroll, SIGNAL(innerResized()), this, SLOT(onInnerResize()));
+	connect(_scroll, &Ui::ScrollArea::scrolled, this, &BoxContent::onScroll);
+	connect(_scroll, &Ui::ScrollArea::innerResized, this, &BoxContent::onInnerResize);
 }
 
 void BoxContent::onScrollToY(int top, int bottom) {
@@ -98,7 +98,7 @@ void BoxContent::onDraggingScrollDelta(int delta) {
 		if (!_draggingScrollTimer) {
 			_draggingScrollTimer.create(this);
 			_draggingScrollTimer->setSingleShot(false);
-			connect(_draggingScrollTimer, SIGNAL(timeout()), this, SLOT(onDraggingScrollTimer()));
+			connect(_draggingScrollTimer, &QTimer::timeout, this, &BoxContent::onDraggingScrollTimer);
 		}
 		_draggingScrollTimer->start(15);
 	} else {

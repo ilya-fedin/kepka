@@ -97,19 +97,19 @@ void PasscodeBox::prepare() {
 		}
 	}
 
-	connect(_oldPasscode, SIGNAL(changed()), this, SLOT(onOldChanged()));
-	connect(_newPasscode, SIGNAL(changed()), this, SLOT(onNewChanged()));
-	connect(_reenterPasscode, SIGNAL(changed()), this, SLOT(onNewChanged()));
-	connect(_passwordHint, SIGNAL(changed()), this, SLOT(onNewChanged()));
-	connect(_recoverEmail, SIGNAL(changed()), this, SLOT(onEmailChanged()));
+	connect(_oldPasscode, &Ui::PasswordInput::changed, this, &PasscodeBox::onOldChanged);
+	connect(_newPasscode, &Ui::PasswordInput::changed, this, &PasscodeBox::onNewChanged);
+	connect(_reenterPasscode, &Ui::PasswordInput::changed, this, &PasscodeBox::onNewChanged);
+	connect(_passwordHint, &Ui::InputField::changed, this, &PasscodeBox::onNewChanged);
+	connect(_recoverEmail, &Ui::InputField::changed, this, &PasscodeBox::onEmailChanged);
 
-	connect(_oldPasscode, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_newPasscode, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_reenterPasscode, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_passwordHint, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_recoverEmail, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
+	connect(_oldPasscode, &Ui::PasswordInput::submitted, this, &PasscodeBox::onSubmit);
+	connect(_newPasscode, &Ui::PasswordInput::submitted, this, &PasscodeBox::onSubmit);
+	connect(_reenterPasscode, &Ui::PasswordInput::submitted, this, &PasscodeBox::onSubmit);
+	connect(_passwordHint, &Ui::InputField::submitted, this, &PasscodeBox::onSubmit);
+	connect(_recoverEmail,&Ui::InputField::submitted, this, &PasscodeBox::onSubmit);
 
-	connect(_recover, SIGNAL(clicked()), this, SLOT(onRecoverByEmail()));
+	connect(_recover, &Ui::LinkButton::clicked, this, &PasscodeBox::onRecoverByEmail);
 
 	bool has = _cloudPwd ? (!_curSalt.isEmpty()) : Global::LocalPasscode();
 	_oldPasscode->setVisible(_turningOff || has);
@@ -486,8 +486,8 @@ void RecoverBox::prepare() {
 	setDimensions(st::boxWidth, st::passcodePadding.top() + st::passcodePadding.bottom() + st::passcodeTextLine +
 	                                _recoverCode->height() + st::passcodeTextLine);
 
-	connect(_recoverCode, SIGNAL(changed()), this, SLOT(onCodeChanged()));
-	connect(_recoverCode, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
+	connect(_recoverCode, &Ui::InputField::changed, this, &RecoverBox::onCodeChanged);
+	connect(_recoverCode, &Ui::InputField::submitted, this, &RecoverBox::onSubmit);
 }
 
 void RecoverBox::paintEvent(QPaintEvent *e) {

@@ -66,7 +66,7 @@ Tooltip::Tooltip()
 	_showTimer.setCallback([this] { performShow(); });
 	_hideByLeaveTimer.setCallback([] { Hide(); });
 
-	connect(App::wnd()->windowHandle(), SIGNAL(activeChanged()), this, SLOT(onWndActiveChanged()));
+	connect(App::wnd()->windowHandle(), &QWindow::activeChanged, this, &Tooltip::onWndActiveChanged);
 }
 
 void Tooltip::performShow() {

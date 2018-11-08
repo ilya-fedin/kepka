@@ -51,7 +51,7 @@ SignupWidget::SignupWidget(QWidget *parent, Widget::Data *data)
 		setTabOrder(_first, _last);
 	}
 
-	connect(_checkRequest, SIGNAL(timeout()), this, SLOT(onCheckRequest()));
+	connect(_checkRequest, &QTimer::timeout, this, &SignupWidget::onCheckRequest);
 
 	setupPhotoButton();
 
@@ -94,7 +94,7 @@ void SignupWidget::setupPhotoButton() {
 				    return;
 			    }
 			    auto box = Ui::show(Box<PhotoCropBox>(img, PeerId(0)));
-			    connect(box, SIGNAL(ready(const QImage &)), this, SLOT(onPhotoReady(const QImage &)));
+				connect(box, &PhotoCropBox::ready, this, &SignupWidget::onPhotoReady);
 		    }));
 	}));
 }

@@ -95,7 +95,7 @@ void PeerListBox::prepare() {
 		onScrollToY(0);
 	}
 
-	connect(_inner, SIGNAL(mustScrollTo(int, int)), this, SLOT(onScrollToY(int, int)));
+	connect(_inner, &Inner::mustScrollTo, this, &PeerListBox::onScrollToY);
 
 	if (_init) {
 		_init(this);

@@ -209,7 +209,7 @@ TCPConnection::TCPConnection(QThread *thread)
     , _flags(0) {
 	tcpTimeoutTimer.moveToThread(thread);
 	tcpTimeoutTimer.setSingleShot(true);
-	connect(&tcpTimeoutTimer, SIGNAL(timeout()), this, SLOT(onTcpTimeoutTimer()));
+	connect(&tcpTimeoutTimer, &QTimer::timeout, this, &TCPConnection::onTcpTimeoutTimer);
 
 	sock.moveToThread(thread);
 	App::setProxySettings(sock);

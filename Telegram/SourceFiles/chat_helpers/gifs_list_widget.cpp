@@ -131,13 +131,13 @@ GifsListWidget::GifsListWidget(QWidget *parent, not_null<Window::Controller *> c
 	setAttribute(Qt::WA_OpaquePaintEvent);
 
 	_previewTimer.setSingleShot(true);
-	connect(&_previewTimer, SIGNAL(timeout()), this, SLOT(onPreview()));
+	connect(&_previewTimer, &QTimer::timeout, this, &GifsListWidget::onPreview);
 
 	_updateInlineItems.setSingleShot(true);
-	connect(&_updateInlineItems, SIGNAL(timeout()), this, SLOT(onUpdateInlineItems()));
+	connect(&_updateInlineItems, &QTimer::timeout, this, &GifsListWidget::onUpdateInlineItems);
 
 	_inlineRequestTimer.setSingleShot(true);
-	connect(&_inlineRequestTimer, &QTimer::timeout, this, [this] { sendInlineRequest(); });
+	connect(&_inlineRequestTimer, &QTimer::timeout, [this] { sendInlineRequest(); });
 
 	subscribe(Auth().data().savedGifsUpdated(), [this] { refreshSavedGifs(); });
 	subscribe(Auth().downloaderTaskFinished(), [this] { update(); });

@@ -37,12 +37,12 @@ InnerDropdown::InnerDropdown(QWidget *parent, const style::InnerDropdown &st)
     , _st(st)
     , _scroll(this, _st.scroll) {
 	_hideTimer.setSingleShot(true);
-	connect(&_hideTimer, SIGNAL(timeout()), this, SLOT(onHideAnimated()));
+	connect(&_hideTimer, &QTimer::timeout, this, &InnerDropdown::onHideAnimated);
 
-	connect(_scroll, SIGNAL(scrolled()), this, SLOT(onScroll()));
+	connect(_scroll, &ScrollArea::scrolled, this, &InnerDropdown::onScroll);
 
 	if (cPlatform() == dbipMac || cPlatform() == dbipMacOld) {
-		connect(App::wnd()->windowHandle(), SIGNAL(activeChanged()), this, SLOT(onWindowActiveChanged()));
+		connect(App::wnd()->windowHandle(), &QWindow::activeChanged, this, &InnerDropdown::onWindowActiveChanged);
 	}
 
 	hide();

@@ -150,14 +150,14 @@ MediaView::MediaView()
 	}
 
 	_saveMsgUpdater.setSingleShot(true);
-	connect(&_saveMsgUpdater, SIGNAL(timeout()), this, SLOT(updateImage()));
+	connect(&_saveMsgUpdater, &QTimer::timeout, this, &MediaView::updateImage);
 
 	setAttribute(Qt::WA_AcceptTouchEvents);
 	_touchTimer.setSingleShot(true);
-	connect(&_touchTimer, SIGNAL(timeout()), this, SLOT(onTouchTimer()));
+	connect(&_touchTimer, &QTimer::timeout, this, &MediaView::onTouchTimer);
 
 	_controlsHideTimer.setSingleShot(true);
-	connect(&_controlsHideTimer, SIGNAL(timeout()), this, SLOT(onHideControls()));
+	connect(&_controlsHideTimer, &QTimer::timeout, [=]{onHideControls();});
 
 	connect(_docDownload, SIGNAL(clicked()), this, SLOT(onDownload()));
 	connect(_docSaveAs, SIGNAL(clicked()), this, SLOT(onSaveAs()));
@@ -165,7 +165,7 @@ MediaView::MediaView()
 
 	_dropdown->setHiddenCallback([this] { dropdownHidden(); });
 	_dropdownShowTimer->setSingleShot(true);
-	connect(_dropdownShowTimer, SIGNAL(timeout()), this, SLOT(onDropdown()));
+	connect(_dropdownShowTimer, &QTimer::timeout, this, &MediaView::onDropdown);
 }
 
 void MediaView::refreshLang() {

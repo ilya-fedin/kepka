@@ -84,14 +84,14 @@ void ConnectionBox::prepare() {
 
 	_typeGroup->setChangedCallback([this](DBIConnectionType value) { typeChanged(value); });
 
-	connect(_hostInput, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_portInput, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_userInput, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_passwordInput, SIGNAL(submitted(bool)), this, SLOT(onSubmit()));
-	connect(_hostInput, SIGNAL(focused()), this, SLOT(onFieldFocus()));
-	connect(_portInput, SIGNAL(focused()), this, SLOT(onFieldFocus()));
-	connect(_userInput, SIGNAL(focused()), this, SLOT(onFieldFocus()));
-	connect(_passwordInput, SIGNAL(focused()), this, SLOT(onFieldFocus()));
+	connect(_hostInput, &Ui::InputField::submitted, this, &ConnectionBox::onSubmit);
+	connect(_portInput, &Ui::PortInput::submitted, this, &ConnectionBox::onSubmit);
+	connect(_userInput, &Ui::InputField::submitted, this, &ConnectionBox::onSubmit);
+	connect(_passwordInput,&Ui::PasswordInput::submitted, this, &ConnectionBox::onSubmit);
+	connect(_hostInput, &Ui::InputField::focused, this, &ConnectionBox::onFieldFocus);
+	connect(_portInput, &Ui::PortInput::focused, this, &ConnectionBox::onFieldFocus);
+	connect(_userInput, &Ui::InputField::focused, this, &ConnectionBox::onFieldFocus);
+	connect(_passwordInput, &Ui::PasswordInput::focused, this, &ConnectionBox::onFieldFocus);
 
 	updateControlsVisibility();
 }

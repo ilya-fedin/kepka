@@ -74,10 +74,10 @@ OverviewInner::OverviewInner(OverviewWidget *overview, Ui::ScrollArea *scroll, P
 	App::contextItem(0);
 
 	_touchSelectTimer.setSingleShot(true);
-	connect(&_touchSelectTimer, SIGNAL(timeout()), this, SLOT(onTouchSelect()));
+	connect(&_touchSelectTimer, &QTimer::timeout, this, &OverviewInner::onTouchSelect);
 
 	setAttribute(Qt::WA_AcceptTouchEvents);
-	connect(&_touchScrollTimer, SIGNAL(timeout()), this, SLOT(onTouchScrollTimer()));
+	connect(&_touchScrollTimer, &QTimer::timeout, this, &OverviewInner::onTouchScrollTimer);
 
 	mediaOverviewUpdated();
 	setMouseTracking(true);
@@ -87,7 +87,7 @@ OverviewInner::OverviewInner(OverviewWidget *overview, Ui::ScrollArea *scroll, P
 	connect(_search, SIGNAL(changed()), this, SLOT(onSearchUpdate()));
 
 	_searchTimer.setSingleShot(true);
-	connect(&_searchTimer, SIGNAL(timeout()), this, SLOT(onSearchMessages()));
+	connect(&_searchTimer, &QTimer::timeout, [=] { onSearchMessages();});
 
 	subscribe(Window::Theme::Background(), [this](const Window::Theme::BackgroundUpdate &update) {
 		if (update.paletteChanged()) {
@@ -2028,7 +2028,7 @@ OverviewWidget::OverviewWidget(QWidget *parent, not_null<Window::Controller *> c
 	_scroll->show();
 	connect(_scroll, SIGNAL(scrolled()), this, SLOT(onScroll()));
 
-	connect(&_scrollTimer, SIGNAL(timeout()), this, SLOT(onScrollTimer()));
+	connect(&_scrollTimer, &QTimer::timeout, this, &OverviewWidget::onScrollTimer);
 	_scrollTimer.setSingleShot(false);
 
 	switchType(type);

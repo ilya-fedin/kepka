@@ -43,10 +43,10 @@ Panel::Panel(QWidget *parent, Layout layout)
     , _layout(layout)
     , _scroll(this, st::mediaPlayerScroll) {
 	_hideTimer.setSingleShot(true);
-	connect(&_hideTimer, SIGNAL(timeout()), this, SLOT(onHideStart()));
+	connect(&_hideTimer, &QTimer::timeout, this, &Panel::onHideStart);
 
 	_showTimer.setSingleShot(true);
-	connect(&_showTimer, SIGNAL(timeout()), this, SLOT(onShowStart()));
+	connect(&_showTimer, &QTimer::timeout, this, &Panel::onShowStart);
 
 	hide();
 	updateSize();

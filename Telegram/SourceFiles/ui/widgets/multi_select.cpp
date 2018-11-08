@@ -379,9 +379,9 @@ MultiSelect::Inner::Inner(QWidget *parent, const style::MultiSelect &st, Fn<QStr
     , _field(this, _st.field, std::move(placeholder))
     , _cancel(this, _st.fieldCancel) {
 	_field->customUpDown(true);
-	connect(_field, SIGNAL(focused()), this, SLOT(onFieldFocused()));
-	connect(_field, SIGNAL(changed()), this, SLOT(onQueryChanged()));
-	connect(_field, SIGNAL(submitted(bool)), this, SLOT(onSubmitted(bool)));
+	connect(_field, &InputField::focused, this, &Inner::onFieldFocused);
+	connect(_field, &InputField::changed, this, &Inner::onQueryChanged);
+	connect(_field, &InputField::submitted, this, &Inner::onSubmitted);
 	_cancel->setClickedCallback([this] {
 		clearQuery();
 		_field->setFocus();

@@ -26,6 +26,7 @@
 #include "app.h"
 #include "chat_helpers/emoji_list_widget.h"
 #include "chat_helpers/gifs_list_widget.h"
+#include "inline_bots/inline_bot_result.h"
 #include "chat_helpers/stickers.h"
 #include "chat_helpers/stickers_list_widget.h"
 #include "lang/lang_keys.h"
@@ -339,16 +340,16 @@ TabbedSelector::TabbedSelector(QWidget *parent, not_null<Window::Controller *> c
 		});
 	}
 
-	connect(stickers(), SIGNAL(scrollUpdated()), this, SLOT(onScroll()));
-	connect(_scroll, SIGNAL(scrolled()), this, SLOT(onScroll()));
-	connect(emoji(), SIGNAL(selected(EmojiPtr)), this, SIGNAL(emojiSelected(EmojiPtr)));
-	connect(stickers(), SIGNAL(selected(DocumentData *)), this, SIGNAL(stickerSelected(DocumentData *)));
-	connect(stickers(), SIGNAL(checkForHide()), this, SIGNAL(checkForHide()));
-	connect(gifs(), SIGNAL(selected(DocumentData *)), this, SIGNAL(stickerSelected(DocumentData *)));
-	connect(gifs(), SIGNAL(selected(PhotoData *)), this, SIGNAL(photoSelected(PhotoData *)));
-	connect(gifs(), SIGNAL(selected(InlineBots::Result *, UserData *)), this,
-	        SIGNAL(inlineResultSelected(InlineBots::Result *, UserData *)));
-	connect(gifs(), SIGNAL(cancelled()), this, SIGNAL(cancelled()));
+	connect(stickers(), &StickersListWidget::scrollUpdated, this, &TabbedSelector::onScroll);
+	connect(_scroll, &Ui::ScrollArea::scrolled, this, &TabbedSelector::onScroll);
+	connect(emoji(), &EmojiListWidget::selected, this, &TabbedSelector::emojiSelected);
+	connect(stickers(), &StickersListWidget::selected, this, &TabbedSelector::stickerSelected);
+	connect(stickers(), &StickersListWidget::checkForHide, this, &TabbedSelector::checkForHide);
+	connect(gifs(), qOverload<DocumentData *>(&GifsListWidget::selected), this, &TabbedSelector::stickerSelected);
+	connect(gifs(), qOverload<PhotoData *>(&GifsListWidget::selected), this, &TabbedSelector::photoSelected);
+	connect(gifs(), qOverload<InlineBots::Result *, UserData *>(&GifsListWidget::selected), this,
+	        &TabbedSelector::inlineResultSelected);
+	connect(gifs(), &GifsListWidget::cancelled, this, &TabbedSelector::cancelled);
 
 	_topShadow->raise();
 	_bottomShadow->raise();

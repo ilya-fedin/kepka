@@ -466,10 +466,10 @@ StickersListWidget::StickersListWidget(QWidget *parent, not_null<Window::Control
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
 
-	connect(_settings, SIGNAL(clicked()), this, SLOT(onSettings()));
+	connect(_settings, &Ui::LinkButton::clicked, this, &StickersListWidget::onSettings);
 
 	_previewTimer.setSingleShot(true);
-	connect(&_previewTimer, SIGNAL(timeout()), this, SLOT(onPreview()));
+	connect(&_previewTimer, &QTimer::timeout, this, &StickersListWidget::onPreview);
 
 	subscribe(Auth().downloaderTaskFinished(), [this] {
 		update();

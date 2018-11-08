@@ -176,7 +176,7 @@ Instance::Inner::Inner(QThread *thread)
     : d(new Private()) {
 	moveToThread(thread);
 	_timer.moveToThread(thread);
-	connect(&_timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+	connect(&_timer, &QTimer::timeout, this, &Instance::Inner::onTimeout);
 }
 
 Instance::Inner::~Inner() {

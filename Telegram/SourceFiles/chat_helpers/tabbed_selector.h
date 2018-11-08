@@ -90,7 +90,7 @@ public:
 	bool wheelEventFromFloatPlayer(QEvent *e);
 	QRect rectForFloatPlayer();
 
-	~TabbedSelector();
+	~TabbedSelector() override;
 
 	class Inner;
 	class InnerFooter;

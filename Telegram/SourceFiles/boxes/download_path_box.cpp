@@ -48,7 +48,7 @@ void DownloadPathBox::prepare() {
 
 	_group->setChangedCallback([this](Directory value) { radioChanged(value); });
 
-	connect(_pathLink, SIGNAL(clicked()), this, SLOT(onEditPath()));
+	connect(_pathLink, &Ui::LinkButton::clicked, this, &DownloadPathBox::onEditPath);
 	if (!_path.isEmpty() && _path != qsl("tmp")) {
 		setPathText(QDir::toNativeSeparators(_path));
 	}

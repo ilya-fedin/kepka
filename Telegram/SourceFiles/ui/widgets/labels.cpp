@@ -173,7 +173,7 @@ void FlatLabel::init() {
 	_trippleClickTimer.setSingleShot(true);
 
 	_touchSelectTimer.setSingleShot(true);
-	connect(&_touchSelectTimer, SIGNAL(timeout()), this, SLOT(onTouchSelect()));
+	connect(&_touchSelectTimer, &QTimer::timeout, this, &FlatLabel::onTouchSelect);
 }
 
 void FlatLabel::textUpdated() {
@@ -539,7 +539,7 @@ void FlatLabel::showContextMenu(QContextMenuEvent *e, ContextMenuReason reason) 
 		delete _contextMenu;
 		_contextMenu = nullptr;
 	} else {
-		connect(_contextMenu, SIGNAL(destroyed(QObject *)), this, SLOT(onContextMenuDestroy(QObject *)));
+		connect(_contextMenu, &Ui::PopupMenu::destroyed, this, &FlatLabel::onContextMenuDestroy);
 		_contextMenu->popup(e->globalPos());
 		e->accept();
 	}

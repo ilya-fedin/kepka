@@ -687,14 +687,14 @@ HistoryWidget::HistoryWidget(QWidget *parent, not_null<Window::Controller *> con
 	connect(_field, SIGNAL(linksChanged()), this, SLOT(onPreviewCheck()));
 	connect(static_cast<const QWindow *>(App::wnd()->windowHandle()), SIGNAL(visibleChanged(bool)), this,
 	        SLOT(onWindowVisibleChanged()));
-	connect(&_scrollTimer, SIGNAL(timeout()), this, SLOT(onScrollTimer()));
+	connect(&_scrollTimer, &QTimer::timeout, this, &HistoryWidget::onScrollTimer);
 	connect(_tabbedSelector, SIGNAL(emojiSelected(EmojiPtr)), _field, SLOT(onEmojiInsert(EmojiPtr)));
 	connect(_tabbedSelector, SIGNAL(stickerSelected(DocumentData *)), this, SLOT(onStickerSend(DocumentData *)));
 	connect(_tabbedSelector, SIGNAL(photoSelected(PhotoData *)), this, SLOT(onPhotoSend(PhotoData *)));
 	connect(_tabbedSelector, SIGNAL(inlineResultSelected(InlineBots::Result *, UserData *)), this,
 	        SLOT(onInlineResultSend(InlineBots::Result *, UserData *)));
-	connect(&_sendActionStopTimer, SIGNAL(timeout()), this, SLOT(onCancelSendAction()));
-	connect(&_previewTimer, SIGNAL(timeout()), this, SLOT(onPreviewTimeout()));
+	connect(&_sendActionStopTimer, &QTimer::timeout, this, &HistoryWidget::onCancelSendAction);
+	connect(&_previewTimer, &QTimer::timeout, this, &HistoryWidget::onPreviewTimeout);
 	connect(Media::Capture::instance(), SIGNAL(error()), this, SLOT(onRecordError()));
 	connect(Media::Capture::instance(), SIGNAL(updated(quint16, qint32)), this, SLOT(onRecordUpdate(quint16, qint32)));
 	connect(Media::Capture::instance(), SIGNAL(done(QByteArray, VoiceWaveform, qint32)), this,
@@ -704,7 +704,7 @@ HistoryWidget::HistoryWidget(QWidget *parent, not_null<Window::Controller *> con
 	    App::LambdaDelayed(st::historyAttach.ripple.hideDuration, this, [this] { chooseAttach(); }));
 
 	_updateHistoryItems.setSingleShot(true);
-	connect(&_updateHistoryItems, SIGNAL(timeout()), this, SLOT(onUpdateHistoryItems()));
+	connect(&_updateHistoryItems, &QTimer::timeout, this, &HistoryWidget::onUpdateHistoryItems);
 
 	_scrollTimer.setSingleShot(false);
 
@@ -713,12 +713,12 @@ HistoryWidget::HistoryWidget(QWidget *parent, not_null<Window::Controller *> con
 	_highlightTimer.setCallback([this] { updateHighlightedMessage(); });
 
 	_membersDropdownShowTimer.setSingleShot(true);
-	connect(&_membersDropdownShowTimer, SIGNAL(timeout()), this, SLOT(onMembersDropdownShow()));
+	connect(&_membersDropdownShowTimer, &QTimer::timeout, this, &HistoryWidget::onMembersDropdownShow);
 
 	_saveDraftTimer.setSingleShot(true);
-	connect(&_saveDraftTimer, SIGNAL(timeout()), this, SLOT(onDraftSave()));
+	connect(&_saveDraftTimer, &QTimer::timeout, [=]{onDraftSave();});
 	_saveCloudDraftTimer.setSingleShot(true);
-	connect(&_saveCloudDraftTimer, SIGNAL(timeout()), this, SLOT(onCloudDraftSave()));
+	connect(&_saveCloudDraftTimer, &QTimer::timeout, this, &HistoryWidget::onCloudDraftSave);
 	connect(_field->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onDraftSaveDelayed()));
 	connect(_field, SIGNAL(cursorPositionChanged()), this, SLOT(onDraftSaveDelayed()));
 	connect(_field, SIGNAL(cursorPositionChanged()), this, SLOT(onCheckFieldAutocomplete()), Qt::QueuedConnection);
@@ -790,7 +790,7 @@ HistoryWidget::HistoryWidget(QWidget *parent, not_null<Window::Controller *> con
 	_attachDragPhoto->setDroppedCallback(
 	    [this](const QMimeData *data) { confirmSendingFiles(data, CompressConfirm::Yes); });
 
-	connect(&_updateEditTimeLeftDisplay, SIGNAL(timeout()), this, SLOT(updateField()));
+	connect(&_updateEditTimeLeftDisplay, &QTimer::timeout, this, &HistoryWidget::updateField);
 
 	subscribe(Adaptive::Changed(), [this] { update(); });
 	subscribe(Global::RefItemRemoved(), [this](HistoryItem *item) { itemRemoved(item); });

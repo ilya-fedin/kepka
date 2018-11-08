@@ -98,13 +98,13 @@ Session::Session(not_null<Instance *> instance, ShiftedDcId shiftedDcId)
     , _instance(instance)
     , data(this)
     , dcWithShift(shiftedDcId) {
-	connect(&timeouter, SIGNAL(timeout()), this, SLOT(checkRequestsByTimer()));
+    connect(&timeouter, &QTimer::timeout, this, &Session::checkRequestsByTimer);
 	timeouter.start(1000);
 
 	data.setSystemLangCode(instance->systemLangCode());
 	data.setCloudLangCode(instance->cloudLangCode());
 
-	connect(&sender, SIGNAL(timeout()), this, SLOT(needToResumeAndSend()));
+	connect(&sender, &QTimer::timeout, this, &Session::needToResumeAndSend);
 }
 
 void Session::start() {

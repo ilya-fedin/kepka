@@ -94,16 +94,16 @@ Application::Application(int &argc, char **argv)
 	_localServerName = psServerPrefix() + h;
 #endif // OS_MAC_STORE
 
-	connect(&_localSocket, SIGNAL(connected()), this, SLOT(socketConnected()));
-	connect(&_localSocket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-	connect(&_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this,
-	        SLOT(socketError(QLocalSocket::LocalSocketError)));
-	connect(&_localSocket, SIGNAL(bytesWritten(qint64)), this, SLOT(socketWritten(qint64)));
-	connect(&_localSocket, SIGNAL(readyRead()), this, SLOT(socketReading()));
-	connect(&_localServer, SIGNAL(newConnection()), this, SLOT(newInstanceConnected()));
+	connect(&_localSocket, &QLocalSocket::connected, this, &Application::socketConnected);
+	connect(&_localSocket, &QLocalSocket::disconnected, this, &Application::socketDisconnected);
+	connect(&_localSocket, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error), this,
+	        &Application::socketError);
+	connect(&_localSocket, &QLocalSocket::bytesWritten, this, &Application::socketWritten);
+	connect(&_localSocket, &QLocalSocket::readyRead, this, &Application::socketReading);
+	connect(&_localServer, &QLocalServer::newConnection, this, &Application::newInstanceConnected);
 
-	QTimer::singleShot(0, this, SLOT(startApplication()));
-	connect(this, SIGNAL(aboutToQuit()), this, SLOT(closeApplication()));
+	QTimer::singleShot(0, this, &Application::startApplication);
+	connect(this, &Application::aboutToQuit, this, &Application::closeApplication);
 
 	if (cManyInstance()) {
 		LOG(("Many instance allowed, starting..."));
@@ -237,8 +237,8 @@ void Application::newInstanceConnected() {
 	for (QLocalSocket *client = _localServer.nextPendingConnection(); client;
 	     client = _localServer.nextPendingConnection()) {
 		_localClients.push_back(LocalClient(client, QByteArray()));
-		connect(client, SIGNAL(readyRead()), this, SLOT(readClients()));
-		connect(client, SIGNAL(disconnected()), this, SLOT(removeClients()));
+		connect(client, &QLocalSocket::readyRead, this, &Application::readClients);
+		connect(client, &QLocalSocket::disconnected, this, &Application::removeClients);
 	}
 }
 
@@ -329,7 +329,7 @@ void Application::closeApplication() {
 
 	_localServer.close();
 	for (LocalClients::iterator i = _localClients.begin(), e = _localClients.end(); i != e; ++i) {
-		disconnect(i->first, SIGNAL(disconnected()), this, SLOT(removeClients()));
+		disconnect(i->first, &QLocalSocket::disconnected, this, &Application::removeClients);
 		i->first->close();
 	}
 	_localClients.clear();

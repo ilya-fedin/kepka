@@ -42,8 +42,8 @@ void LocalStorageBox::prepare() {
 
 	_clear->setClickedCallback([this] { clearStorage(); });
 
-	connect(App::wnd(), SIGNAL(tempDirCleared(int)), this, SLOT(onTempDirCleared(int)));
-	connect(App::wnd(), SIGNAL(tempDirClearFailed(int)), this, SLOT(onTempDirClearFailed(int)));
+	connect(App::wnd(), &MainWindow::tempDirCleared, this, &LocalStorageBox::onTempDirCleared);
+	connect(App::wnd(), &MainWindow::tempDirClearFailed, this, &LocalStorageBox::onTempDirClearFailed);
 
 	subscribe(Auth().downloaderTaskFinished(), [this] { update(); });
 

@@ -55,7 +55,7 @@ void PhotoCropBox::prepare() {
 	addButton(langFactory(lng_settings_save), [this] { sendPhoto(); });
 	addButton(langFactory(lng_cancel), [this] { closeBox(); });
 	if (peerToBareInt(_peerId)) {
-		connect(this, SIGNAL(ready(const QImage &)), this, SLOT(onReady(const QImage &)));
+		connect(this, &PhotoCropBox::ready, this, &PhotoCropBox::onReady);
 	}
 
 	qint32 s = st::boxWideWidth - st::boxPhotoPadding.left() - st::boxPhotoPadding.right();

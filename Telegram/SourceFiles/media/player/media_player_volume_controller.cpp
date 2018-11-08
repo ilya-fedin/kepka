@@ -91,10 +91,10 @@ VolumeWidget::VolumeWidget(QWidget *parent)
 	_controller->setIsVertical(true);
 
 	_hideTimer.setSingleShot(true);
-	connect(&_hideTimer, SIGNAL(timeout()), this, SLOT(onHideStart()));
+	connect(&_hideTimer, &QTimer::timeout, this, &VolumeWidget::onHideStart);
 
 	_showTimer.setSingleShot(true);
-	connect(&_showTimer, SIGNAL(timeout()), this, SLOT(onShowStart()));
+	connect(&_showTimer, &QTimer::timeout, this, &VolumeWidget::onShowStart);
 
 	if (cPlatform() == dbipMac || cPlatform() == dbipMacOld) {
 		connect(App::wnd()->windowHandle(), SIGNAL(activeChanged()), this, SLOT(onWindowActiveChanged()));

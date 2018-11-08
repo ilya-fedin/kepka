@@ -636,7 +636,7 @@ Manager::Manager(QThread *thread)
 
 	_timer.setSingleShot(true);
 	_timer.moveToThread(thread);
-	connect(&_timer, SIGNAL(timeout()), this, SLOT(process()));
+	connect(&_timer, &QTimer::timeout, this, &Manager::process);
 
 	anim::registerClipManager(this);
 }

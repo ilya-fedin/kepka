@@ -43,22 +43,22 @@ FieldAutocomplete::FieldAutocomplete(QWidget *parent)
 	    _scroll->setOwnedWidget(object_ptr<internal::FieldAutocompleteInner>(this, &_mrows, &_hrows, &_brows, &_srows));
 	_inner->setGeometry(rect());
 
-	connect(_inner, SIGNAL(mentionChosen(UserData *, FieldAutocomplete::ChooseMethod)), this,
-	        SIGNAL(mentionChosen(UserData *, FieldAutocomplete::ChooseMethod)));
-	connect(_inner, SIGNAL(hashtagChosen(QString, FieldAutocomplete::ChooseMethod)), this,
-	        SIGNAL(hashtagChosen(QString, FieldAutocomplete::ChooseMethod)));
-	connect(_inner, SIGNAL(botCommandChosen(QString, FieldAutocomplete::ChooseMethod)), this,
-	        SIGNAL(botCommandChosen(QString, FieldAutocomplete::ChooseMethod)));
-	connect(_inner, SIGNAL(stickerChosen(DocumentData *, FieldAutocomplete::ChooseMethod)), this,
-	        SIGNAL(stickerChosen(DocumentData *, FieldAutocomplete::ChooseMethod)));
-	connect(_inner, SIGNAL(mustScrollTo(int, int)), _scroll, SLOT(scrollToY(int, int)));
+	connect(_inner, &internal::FieldAutocompleteInner::mentionChosen, this,
+	        &FieldAutocomplete::mentionChosen);
+	connect(_inner, &internal::FieldAutocompleteInner::hashtagChosen, this,
+	        &FieldAutocomplete::hashtagChosen);
+	connect(_inner, &internal::FieldAutocompleteInner::botCommandChosen, this,
+	        &FieldAutocomplete::botCommandChosen);
+	connect(_inner, &internal::FieldAutocompleteInner::stickerChosen, this,
+	        &FieldAutocomplete::stickerChosen);
+	connect(_inner, &internal::FieldAutocompleteInner::mustScrollTo, _scroll, &Ui::ScrollArea::scrollToY);
 
 	_scroll->show();
 	_inner->show();
 
 	hide();
 
-	connect(_scroll, SIGNAL(geometryChanged()), _inner, SLOT(onParentGeometryChanged()));
+	connect(_scroll, &Ui::ScrollArea::geometryChanged, _inner,  &internal::FieldAutocompleteInner::onParentGeometryChanged);
 }
 
 void FieldAutocomplete::paintEvent(QPaintEvent *e) {
@@ -540,7 +540,7 @@ FieldAutocompleteInner::FieldAutocompleteInner(FieldAutocomplete *parent, Mentio
     , _overDelete(false)
     , _previewShown(false) {
 	_previewTimer.setSingleShot(true);
-	connect(&_previewTimer, SIGNAL(timeout()), this, SLOT(onPreview()));
+	connect(&_previewTimer, &QTimer::timeout, this, &FieldAutocompleteInner::onPreview);
 	subscribe(Auth().downloaderTaskFinished(), [this] { update(); });
 }
 
